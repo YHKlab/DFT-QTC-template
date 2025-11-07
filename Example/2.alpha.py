@@ -46,9 +46,11 @@ if __name__ == '__main__':
     input_run = os.path.abspath(f'origin/RUN.fdf')
     input_slm = os.path.abspath(f'origin/slm_*')
 
-    input_ions = glob.glob('origin/*.ion')
-    input_target_ion = os.path.abspath(f'./1.dft/OUT/{ion_name}.ion') # to be corrected
 
+    input_ions = glob.glob('./1.dft/OUT/*.ion')
+    input_ions = input_ions + glob.glob('origin/*.ion')
+    input_ions = [ os.path.abspath(path) for path in input_ions ]
+    input_target_ion = os.path.abspath(f'./1.dft/OUT/{ion_name}.ion') # to be corrected
 
 
 
@@ -88,8 +90,8 @@ if __name__ == '__main__':
         os.system(f'cp -r {input_dft} {path}/input/DFT.RHO')
 
         # copy reference ion
-        for ion in input_ions:
-            os.system('cp {input_ion} {path}/input/.')
+        for input_ion in input_ions:
+            os.system(f'cp {input_ion} {path}/input/.')
 
         # generate ion
         os.system(f'python {exec_gion} --fae {input_fae} --hae {input_hae} --ion {input_target_ion} --rout {rc} --n 20 --out {path}/input/{ion_name}.ion')
