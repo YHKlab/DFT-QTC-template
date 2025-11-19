@@ -49,7 +49,7 @@ DFT-half              T
 DFT-half.Local        T
 DFT-half.Local.SCF    T
 DFT-half.Local.SCF.ELF T
-DFT-half.Local.SCF.Sigma  5.0
+DFT-half.Local.SCF.ELF.K 2.0  # Optimal parameter giving good IP
 
 
 #(10) Output options
