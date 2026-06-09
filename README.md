@@ -3,7 +3,7 @@
 ## (0) Setup Environment
 - Copy the executable program and the codes in the **`Utils`** directory.  
 - Paste them into your **`bin`** directory.
-- You can directly build **DFT-QTC** program from [SIESTA-DFT-QTC](https://github.com/YHKlab/SIESTA-DFT-QTC)  
+- You can directly build the **DFT-QTC** program from [SIESTA-DFT-QTC](https://github.com/YHKlab/SIESTA-DFT-QTC)  
 
 
 ## (1) Setup Calculation (using `Example`)
