@@ -3,6 +3,8 @@
 ## (0) Setup Environment
 - Copy the executable program and the codes in the **`Utils`** directory.  
 - Paste them into your **`bin`** directory.
+- You can directly build **DFT-QTC** program from [SIESTA-DFT-QTC](https://github.com/YHKlab/SIESTA-DFT-QTC)  
+
 
 ## (1) Setup Calculation (using `Example`)
 1. Copy the original DFT calculation directory into **`Example/1.dft`**.  
@@ -34,7 +36,7 @@
      ```
 
    - **`Rc`**:  
-     Defines the cutoff radius scan range. This is used to search for the optimal cutoff parameter.  
+     Defines the 'outer' cutoff radius scan range. This is used to search for the optimal cutoff parameter.  
        - **`Min`**: Minimum cutoff radius.  
        - **`Max`**: Maximum cutoff radius.  
        - **`Npt`**: Number of sampling points between Min and Max.  
