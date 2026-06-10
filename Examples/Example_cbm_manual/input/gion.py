@@ -17,6 +17,7 @@ import argparse
  	  2024.10.03: without [rcut] calculation for isolated atoms (Kaptan Rajput)
  Revised:
       2025.01.16: generalize the code (Ryong-Gyu Lee)
+      2026.06.10: rm/add channel
 '''
 
 def write_ion(fae,hae,ion,rin,rout,n,out):
@@ -89,6 +90,9 @@ def write_ion(fae,hae,ion,rin,rout,n,out):
             no_corr = True
             ynew = np.zeros(cnt)
 
+    # removal or addition
+    Vs_add = ynew[np.argmax(np.abs(ynew))] > 0
+
     # ion file generation
     e=open(out,'w')
 
@@ -96,28 +100,74 @@ def write_ion(fae,hae,ion,rin,rout,n,out):
     for i in ionf.readlines():
         ionfs.append(i)
 
-    for i in range(len(ionfs)):
-        e.write(str(ionfs[i]))
+    if Vs_add:
+        # writing new ion file
+        there_is_Vs_rm = False
+        for i in range(len(ionfs)):
+            if '# Vs:' in ionfs[i]: # for overwriting new Vs lines
+                there_is_Vs_rm = True
+            e.write(str(ionfs[i]))
 
-    if not no_corr:
-        e.write('# Vs:__________________________\n')
-        e.write(f'{cnt:4d} {step:25.16E} {vmax:21.15f}   # npts, delta, cutoff\n')
-        for i in range(cnt):
-            ionx = i * step 
-            ix = format(ionx, ".17f")
-            if abs(ynew[i]) < 0.1:
-                iy = format(ynew[i], ".15E")
-            else:
-                iy = format(ynew[i], ".15f")
-            e.write('    ')
-            e.write(ix)
-            e.write('       ')
-            e.write(iy)
-            e.write('\n')
-        e.close
+        if not there_is_Vs_rm:
+            cnt_dummy = 10
+            vmax_dummy = step*(cnt_dummy-1)
+            e.write('# Vs:__________________________\n')
+            e.write(f'{cnt_dummy:4d} {step:25.16E} {vmax_dummy:21.15f}   # npts, delta, cutoff\n')
+            for i in range(cnt_dummy):
+                ionx = i * step
+                ix = format(ionx, ".17f")
+                iy = format(0, ".15f")
+                e.write('    ')
+                e.write(ix)
+                e.write('       ')
+                e.write(iy)
+                e.write('\n')
+
+        if not no_corr:
+            e.write('# Vs_add:__________________________\n')
+            e.write(f'{cnt:4d} {step:25.16E} {vmax:21.15f}   # npts, delta, cutoff\n')
+            for i in range(cnt):
+                ionx = i * step
+                ix = format(ionx, ".17f")
+                if abs(ynew[i]) < 0.1:
+                    iy = format(ynew[i], ".15E")
+                else:
+                    iy = format(ynew[i], ".15f")
+                e.write('    ')
+                e.write(ix)
+                e.write('       ')
+                e.write(iy)
+                e.write('\n')
+            e.close
+
+        else:
+            e.close
 
     else:
-        e.close
+        # writing new ion file
+        for i in range(len(ionfs)):
+            if '# Vs:' in ionfs[i]: # for overwriting new Vs lines
+                break
+            e.write(str(ionfs[i]))
+
+        if not no_corr:
+            e.write('# Vs:__________________________\n')
+            e.write(f'{cnt:4d} {step:25.16E} {vmax:21.15f}   # npts, delta, cutoff\n')
+            for i in range(cnt):
+                ionx = i * step 
+                ix = format(ionx, ".17f")
+                if abs(ynew[i]) < 0.1:
+                    iy = format(ynew[i], ".15E")
+                else:
+                    iy = format(ynew[i], ".15f")
+                e.write('    ')
+                e.write(ix)
+                e.write('       ')
+                e.write(iy)
+                e.write('\n')
+            e.close
+        else:
+            e.close
 
 if __name__=="__main__":
 

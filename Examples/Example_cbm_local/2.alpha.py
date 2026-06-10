@@ -59,13 +59,13 @@ if __name__ == '__main__':
     if '-' in name:
         occs = [o.split('=')[-1] for o in os.listdir(f'{DB}/{name}/1.ATOM/output_predicted/')]
         occs_values = np.array(occs, dtype = float)
-        indx = np.argsort(np.abs(occ-occs_values))[0] # Nearest value
+        indx = np.argsort(np.abs(float(occ)-occs_values))[0] # Nearest value
         occ = occs[indx]
         input_hae = os.path.abspath(f'{DB}/{name}/1.ATOM/output_predicted/occ={occ}/HEPOT')
     else:
         occs = [o.split('=')[-1] for o in os.listdir(f'{DB}/{name}/1.ATOM/output/')]
         occs_values = np.array(occs, dtype = float)
-        indx = np.argsort(np.abs(occ-occs_values))[0] # Nearest value
+        indx = np.argsort(np.abs(float(occ)-occs_values))[0] # Nearest value
         occ = occs[indx]
         input_hae = os.path.abspath(f'{DB}/{name}/1.ATOM/output/occ={occ}/HEPOT')
 
@@ -94,6 +94,4 @@ if __name__ == '__main__':
             os.system(f'cp {input_ion} {path}/input/.')
 
         # generate ion
-        os.system(f'python {exec_gion} --fae {input_fae} --hae {input_hae} --ion {input_target_ion} --rout {rc} --n 20 --out {path}/input/{ion_name}.ion')
-
-        
+        os.system(f'python {exec_gion} --fae {input_fae} --hae {input_hae} --ion {input_target_ion} --rin 0.0 --rout {rc} --n 20 --out {path}/input/{ion_name}.ion')       
